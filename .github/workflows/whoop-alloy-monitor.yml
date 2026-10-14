@@ -1,0 +1,48 @@
+name: WHOOP Alloy monitor
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check WHOOP Alloy availability
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          PRODUCT_NAME: "WHOOP 5.0 Meridian Band Alloy"
+          PRODUCT_URL: "https://shop.whoop.com/us/en/products/5-meridian-bands/?sku=810114366714"
+          ALERT_REPEAT_MINUTES: "60"
+          ERROR_ALERT_REPEAT_MINUTES: "360"
+          # Optional: set this as a repository variable if you want a ping.
+          # User mention example: <@1234567890>
+          # Role mention example: <@&1234567890>
+          DISCORD_MENTION: ${{ vars.DISCORD_MENTION }}
+        run: node github-monitor/whoop-monitor.mjs
+
+      - name: Save monitor state
+        run: |
+          if [ -n "$(git status --porcelain .monitor-state)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add .monitor-state/whoop-alloy.json
+            git commit -m "Update WHOOP Alloy monitor state"
+            git push
+          else
+            echo "No monitor state changes to commit."
+          fi
