@@ -1,0 +1,16 @@
+name: Test Discord notification
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send test Discord message
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          curl -H "Content-Type: application/json" \
+            -d '{"content":"Test alert: WHOOP Alloy monitor Discord notifications are working."}' \
+            "$DISCORD_WEBHOOK_URL"
