@@ -1,20 +1,15 @@
 {
   "productName": "WHOOP 5.0 Meridian Band Alloy",
   "productUrl": "https://shop.whoop.com/us/en/products/5-meridian-bands/?sku=810114366714",
-  "status": "unavailable",
+  "status": "unknown",
   "available": false,
-  "unavailable": true,
+  "unavailable": false,
   "evidence": {
     "productSignals": [
-      "meridian band",
-      "color 5.0 alloy",
       "810114366714"
     ],
     "availableSignals": [],
-    "unavailableSignals": [
-      "out of stock",
-      "notify me when available"
-    ]
+    "unavailableSignals": []
   },
   "lastHttpStatus": 200,
   "lastError": null,
